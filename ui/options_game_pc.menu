@@ -231,6 +231,7 @@
 
    		FRAME_CHOICE_DVARYESNO_VIS( 28, "@REIMAGINED_FOG", r_fog_settings, ;, 1) //setdvar r_fog dvarbool("r_fog_settings")
 
+
 		#undef	CHOICE_TEXT_COLOR_HL
 		#define	CHOICE_TEXT_COLOR_HL			0 0 0 1
 		FRAME_CHOICE_BUTTON_VIS( 29, "@REIMAGINED_HUD_OPTIONS", setdvar ui_options_game_popup "hud_options"; open mature_content_pc_disable_warning, 1 )
@@ -269,6 +270,8 @@
 		#define	CHOICE_TEXT_COLOR_HL			0 0 0 1
 
 		FRAME_CHOICE_BUTTON_VIS( 33, "@REIMAGINED_SET_TEAMS", setdvar ui_options_game_popup "set_teams"; open mature_content_pc_disable_warning, (dvarString(zm_gamemode) != "survival" && dvarString(vs_teams) == "custom") )
+
+		FRAME_CHOICE_DVARYESNO_VIS( 35, "@MOD_COOP_PAUSE", coop_pause, ;, 1)
 
 		// MP
 		//FRAME_CHOICE_DVARYESNO_VIS( 22, "@MENU_DRAW_HUD_CAPS", hud_enable, ;, ( dvarBool( ui_multiplayer ) ) )

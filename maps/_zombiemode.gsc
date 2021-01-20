@@ -9,6 +9,7 @@
 
 main()
 {
+	println("TEST 123 qwpoijeqwipoejwqpoej");
 	set_gamemode();
 
 	level.max_mines = 30;
@@ -834,7 +835,7 @@ init_levelvars()
 	set_zombie_var( "zombie_score_kill_4player", 		50 );		// Individual Points for a zombie kill in a 4 player game
 	set_zombie_var( "zombie_score_kill_3player",		50 );		// Individual Points for a zombie kill in a 3 player game
 	set_zombie_var( "zombie_score_kill_2player",		50 );		// Individual Points for a zombie kill in a 2 player game
-	set_zombie_var( "zombie_score_kill_1player",		50 );		// Individual Points for a zombie kill in a 1 player game
+	set_zombie_var( "zombie_score_kill_1player",		50000 );		// Individual Points for a zombie kill in a 1 player game
 
 	set_zombie_var( "zombie_score_kill_4p_team", 		30 );		// Team Points for a zombie kill in a 4 player game
 	set_zombie_var( "zombie_score_kill_3p_team",		35 );		// Team Points for a zombie kill in a 3 player game
@@ -890,6 +891,8 @@ init_dvars()
 	SetDvar( "player_lastStandBleedoutTime", "45" );
 
 	SetDvar( "scr_deleteexplosivesonspawn", "0" );
+
+	SetDvar("coop_pause", "0");
 
 	// HACK: To avoid IK crash in zombiemode: MikeA 9/18/2009
 	//setDvar( "ik_enable", "0" );
@@ -1765,6 +1768,8 @@ onPlayerConnect_clientDvars()
 
 	// ammo on HUD never fades away
 	self SetClientDvar("hud_fade_ammodisplay", 0);
+
+	self SetClientDvar("ai_disableSpawn", "0");
 }
 
 
@@ -8297,6 +8302,51 @@ timer_hud()
 	level thread total_time();
 
 	level thread round_time_loop();
+
+	level thread coop_pause();
+}
+
+coop_pause() {
+
+	level endon("disconnect");
+	level endon("end_game");
+
+	players = GetPlayers();
+
+	while(1) {
+		//iprintln("testing 1: " + getDvarInt("coop_pause"));
+		if(getDvarInt("coop_pause")) {
+			iprintln("Pausing at the start of the next round");
+			level waittill("end_of_round");
+			iprintln("Disabling AI Spawning");
+			players[0] SetClientDvar("ai_disableSpawn", "1");
+
+			level waittill("start_of_round");
+			iprintln("Detected round start");
+
+			for(i = 0; i < players.size; i++) {
+				players[i] freezecontrols(true);
+			}
+
+			iprintln("Done freezing");
+
+			while(getDvarInt("coop_pause")) {
+				wait 0.5;
+			}
+
+			iprintln("Got unpause");
+
+			for(i = 0; i < players.size; i++) {
+				players[i] freezecontrols(false);
+			}
+
+			iprintln("Done unfreezeing");
+			players[0] SetClientDvar("ai_disableSpawn", "0");
+
+
+		}
+		wait 0.5;
+	}
 }
 
 total_time()
