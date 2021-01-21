@@ -16,10 +16,10 @@
 //HINTSTRINGS
 
 REFERENCE           WEAPONCOSTAMMO
-LANG_ENGLISH        "Hold woqiuhejioqwuhjeoiwqheoiwqjheoihw ^3[{+activate}]^7 to buy Weapon [Cost: &&1], Ammo [Cost: &&2]"
+LANG_ENGLISH        "Hold ^3[{+activate}]^7 to buy Weapon [Cost: &&1], Ammo [Cost: &&2]"
 
 REFERENCE           WEAPONCOSTAMMO_UPGRADE
-LANG_ENGLISH        "Hold qoiweoiq ^3[{+activate}]^7 to buy Weapon [Cost: &&1], Ammo [Cost: &&2],\n                     Upgraded Ammo [Cost: 2500]"
+LANG_ENGLISH        "Hold ^3[{+activate}]^7 to buy Weapon [Cost: &&1], Ammo [Cost: &&2],\n                     Upgraded Ammo [Cost: 2500]"
 
 REFERENCE           WEAPONCOSTAMMO_UPGRADE_HACKED
 LANG_ENGLISH        "Hold ^3[{+activate}]^7 to buy Upgraded Weapon [Cost: &&1], Ammo [Cost: &&2],\n                         Upgraded Ammo [Cost: &&3]"
@@ -908,8 +908,5 @@ LANG_ENGLISH		"Survive to Win!"
 
 REFERENCE			FINAL_ROUND
 LANG_ENGLISH		"Final Round"
-
-REFERENCE			COOP_PAUSE
-LANG_ENGLISH		"COOP PAUSE"
 
 ENDMARKER

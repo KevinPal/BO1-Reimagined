@@ -33,6 +33,29 @@
 
 	menuDef
 	{
+		name				"pause_hud"
+		rect				0 0 0 0 HORIZONTAL_ALIGN_USER_CENTER VERTICAL_ALIGN_USER_CENTER
+		fullscreen			0
+		visible				when(dvarBool("pause_hud_on"))
+
+		itemDef
+		{
+			name				"pause_hud_text"
+			type				ITEM_TYPE_TEXT
+			rect 				4 2 0 0
+			forecolor			1 1 1 1
+			textscale			TEXTSIZE_LARGE
+			textstyle			ITEM_TEXTSTYLE_SHADOWED
+			textfont			UI_FONT_NORMAL
+			textalign			ITEM_ALIGN_CENTER
+			exp 				text(dvarString("pause_hud_text"))
+			visible				1
+			decoration
+		}
+	}
+
+	menuDef
+	{
 		name				"timer"
 		rect				0 0 0 0 HORIZONTAL_ALIGN_USER_RIGHT VERTICAL_ALIGN_USER_TOP
 		fullscreen			0

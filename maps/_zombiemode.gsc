@@ -9,7 +9,6 @@
 
 main()
 {
-	println("TEST 123 qwpoijeqwipoejwqpoej");
 	set_gamemode();
 
 	level.max_mines = 30;
@@ -256,6 +255,8 @@ post_all_players_connected()
 
 	level thread timer_hud();
 
+    level thread coop_pause();
+
 	level thread enemies_remaining_hud();
 
 	level thread sidequest_hud();
@@ -496,6 +497,12 @@ init_strings()
 	PrecacheString( &"REIMAGINED_WEAPONCOSTAMMO_UPGRADE" );
 	PrecacheString( &"REIMAGINED_WEAPONCOSTAMMO_UPGRADE_HACKED" );
 	PrecacheString( &"REIMAGINED_MYSTERY_BOX" );
+
+
+	PrecacheString( &"GAME_PAUSED" );
+	PrecacheString( &"UNPAUSE_3" );
+	PrecacheString( &"UNPAUSE_2" );
+	PrecacheString( &"UNPAUSE_1" );
 
 	switch(ToLower(GetDvar(#"mapname")))
 	{
@@ -835,7 +842,7 @@ init_levelvars()
 	set_zombie_var( "zombie_score_kill_4player", 		50 );		// Individual Points for a zombie kill in a 4 player game
 	set_zombie_var( "zombie_score_kill_3player",		50 );		// Individual Points for a zombie kill in a 3 player game
 	set_zombie_var( "zombie_score_kill_2player",		50 );		// Individual Points for a zombie kill in a 2 player game
-	set_zombie_var( "zombie_score_kill_1player",		50000 );		// Individual Points for a zombie kill in a 1 player game
+	set_zombie_var( "zombie_score_kill_1player",		50 );		// Individual Points for a zombie kill in a 1 player game
 
 	set_zombie_var( "zombie_score_kill_4p_team", 		30 );		// Team Points for a zombie kill in a 4 player game
 	set_zombie_var( "zombie_score_kill_3p_team",		35 );		// Team Points for a zombie kill in a 3 player game
@@ -1987,6 +1994,7 @@ onPlayerSpawned()
 		self setClientDvar("hud_health_bar_on_game", 1);
 		self setClientDvar("hud_zone_name_on_game", 1);
 		self setClientDvar("hud_character_names_on_game", 1);
+		self setClientDvar("pause_hud_on", 0);
 
 		self SetDepthOfField( 0, 0, 512, 4000, 4, 0 );
 
@@ -8302,8 +8310,6 @@ timer_hud()
 	level thread total_time();
 
 	level thread round_time_loop();
-
-	level thread coop_pause();
 }
 
 coop_pause() {
@@ -8318,17 +8324,22 @@ coop_pause() {
 		if(getDvarInt("coop_pause")) {
 			iprintln("Pausing at the start of the next round");
 			level waittill("end_of_round");
-			iprintln("Disabling AI Spawning");
+
 			players[0] SetClientDvar("ai_disableSpawn", "1");
 
 			level waittill("start_of_round");
-			iprintln("Detected round start");
+
+            for(i=0;i<players.size;i++)
+            {
+                players[i] SetClientDvar("pause_hud_on", 1);
+                players[i] SetClientDvar("pause_hud_text", "Game Paused");
+            }
+
 
 			for(i = 0; i < players.size; i++) {
 				players[i] freezecontrols(true);
 			}
 
-			iprintln("Done freezing");
 
 			while(getDvarInt("coop_pause")) {
 				wait 0.5;
@@ -8336,11 +8347,24 @@ coop_pause() {
 
 			iprintln("Got unpause");
 
+            for(j = 3; j > 0; j--) {
+                for(i=0;i<players.size;i++)
+                {
+                    players[i] SetClientDvar("pause_hud_text", "Unpausing in " + j);
+                }
+                wait 1;
+                if(j == 1) {
+                    for(i=0;i<players.size;i++)
+                    {
+                        players[i] SetClientDvar("pause_hud_on", 0);
+                    }
+                }
+            }
+
 			for(i = 0; i < players.size; i++) {
 				players[i] freezecontrols(false);
 			}
 
-			iprintln("Done unfreezeing");
 			players[0] SetClientDvar("ai_disableSpawn", "0");
 
 
